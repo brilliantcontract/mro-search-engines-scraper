@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import csv
 from utlis import read_input_csv
 
+
 def extract_data_from_main_paths(main_paths, domain_name, catalog_number, results, rank,
                                  link_selector, description_selector, title_selector):
     search_engine = "YAHOO"
@@ -28,13 +29,13 @@ def extract_data_from_main_paths(main_paths, domain_name, catalog_number, result
     return rank
 
 
-
 def write_data_to_csv(output_csv_path, data):
     with open(output_csv_path, mode='w', newline='', encoding='utf-8') as csv_output_file:
         csv_writer = csv.writer(csv_output_file)
         csv_writer.writerow(
             ['SEARCH_ENGINE', 'DOMAIN', 'CATALOG_NUMBER', 'RANK', 'URL', 'TITLE', 'DESCRIPTION', 'IS_SPONSORED'])
         csv_writer.writerows(data)
+
 
 def fetch_data_and_store_in_csv(input_file_path, output_csv_path):
     # Read data from CSV
@@ -83,6 +84,7 @@ def fetch_data_and_store_in_csv(input_file_path, output_csv_path):
 
     # Write results to a CSV file
     write_data_to_csv(output_csv_path, results)
+
 
 if __name__ == "__main__":
     input_file_path = 'input_files/input.csv'
