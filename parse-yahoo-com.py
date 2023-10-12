@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import csv
-from utlis import read_input_csv, write_to_csv
+from utlis import read_input_csv
 
 def extract_data_from_main_paths(main_paths, domain_name, catalog_number, results, rank,
                                  link_selector, description_selector, title_selector):
@@ -26,6 +26,15 @@ def extract_data_from_main_paths(main_paths, domain_name, catalog_number, result
         rank += 1
 
     return rank
+
+
+
+def write_data_to_csv(output_csv_path, data):
+    with open(output_csv_path, mode='w', newline='', encoding='utf-8') as csv_output_file:
+        csv_writer = csv.writer(csv_output_file)
+        csv_writer.writerow(
+            ['SEARCH_ENGINE', 'DOMAIN', 'CATALOG_NUMBER', 'RANK', 'URL', 'TITLE', 'DESCRIPTION', 'IS_SPONSORED'])
+        csv_writer.writerows(data)
 
 def fetch_data_and_store_in_csv(input_file_path, output_csv_path):
     # Read data from CSV
@@ -73,10 +82,10 @@ def fetch_data_and_store_in_csv(input_file_path, output_csv_path):
                                                                 title_selector=' div > h3 > a > span')
 
     # Write results to a CSV file
-    write_to_csv(output_csv_path, results)
+    write_data_to_csv(output_csv_path, results)
 
 if __name__ == "__main__":
     input_file_path = 'input_files/input.csv'
-    output_csv_path = 'output_data.csv'
+    output_csv_path = 'output_data_yahoo.csv'
 
     fetch_data_and_store_in_csv(input_file_path, output_csv_path)
