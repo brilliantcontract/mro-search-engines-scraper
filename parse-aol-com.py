@@ -1,7 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from utlis import read_input_csv, write_to_csv, store_scrap_data
-
+from utils import read_input_csv, write_to_csv, store_scrap_data
 
 # Function to fetch data from the web and return it as a list of results
 def fetch_data(data_getting_csv_file):
@@ -28,7 +27,7 @@ def fetch_data(data_getting_csv_file):
         # Second set of selectors
         links_second_selector = soup.select('a.td-n.lh-24.fz-l')
         description_second_selector = soup.select('div.compText.aAbs > p > a')
-        title_second_selector = soup.select('a.td-n.lh-24.fz-l')
+        title_second_selector = soup.select('a.td-n.lh-24.fz-l')  # Typo: 'soup select' should be 'soup.select'
 
         is_sponsored = bool(soup.select('div.compList.ad-ql.mt-1'))
 
@@ -39,10 +38,11 @@ def fetch_data(data_getting_csv_file):
 
         data_getting_after_scraping = store_scrap_data(links, description, title, search_engine, catalog_number, domain_name, rank, is_sponsored)
         result_after_getting_all_data.extend(iter(data_getting_after_scraping))
+        rank += 1  # Increment rank for the same domain and catalog
+
     return result_after_getting_all_data
 
 # Function to write the results to a CSV file
-
 
 if __name__ == "__main__":
     input_file_path = 'input_files/input.csv'

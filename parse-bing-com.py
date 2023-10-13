@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from utlis import read_input_csv, write_to_csv, store_scrap_data
+from utils import read_input_csv, write_to_csv, store_scrap_data
 
 
 # Function to fetch data from the web and return it as a list of results

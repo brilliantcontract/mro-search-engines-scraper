@@ -7,7 +7,7 @@ from utils import read_input_csv, write_to_csv, store_scrap_data
 def fetch_data(data_getting_csv_file):
     result_after_getting_all_data = []
     rank = 1
-    search_engine = "ECOSIA"
+    search_engine = "ASK"
     previous_domain_catalog = None  # To keep track of the previous domain and catalog
 
     for domain_name, catalog_number in data_getting_csv_file:
@@ -15,25 +15,26 @@ def fetch_data(data_getting_csv_file):
             rank = 1  # Reset rank to 1 for a new domain and catalog
             previous_domain_catalog = (domain_name, catalog_number)
 
-        url = f'https://www.ecosia.org/search?q={domain_name}+{catalog_number}'
+        # Construct the URL to search for domain_name and catalog_number
+        url = f'https://www.ask.com/web?q={domain_name}+{catalog_number}'
         response = requests.get(url)
-
         soup = BeautifulSoup(response.content, 'html.parser')
-        links = soup.select('a.result__link.result__link.link.link--as-a.link--color-result')
-        description = soup.select('p.web-result__description')
-        title = soup.select('h2.result-title__heading')
-        is_sponsored = False
+        # Extract elements from the HTML
+        links = soup.select('a.PartialSearchResults-item-title-link.result-link')
+        description = soup.select('p.PartialSearchResults-item-abstract')
+        title = soup.select('div.PartialSearchResults-item-url')
+        is_sponsored = bool(soup.select('div.scs_child_rpr.rpr_light'))
         data_getting_after_scraping = store_scrap_data(links, description, title, search_engine, catalog_number,
                                                        domain_name, rank, is_sponsored)
-        result_after_getting_all_data.extend(iter(data_getting_after_scraping))
+        result_after_getting_all_data.extend(data_getting_after_scraping)
+        rank += 1
+
     return result_after_getting_all_data
 
 
-# Function to write the results to a CSV file
-
 if __name__ == "__main__":
     input_file_path = 'input_files/input.csv'
-    output_csv_path = 'output_data_ecosia.csv'
+    output_csv_path = 'output_data_ask.csv'
 
     # Read input data from the CSV file
     data = read_input_csv(input_file_path)
